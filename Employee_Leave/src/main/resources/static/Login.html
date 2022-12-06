@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<title>Leave Management</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="./loginCtrl.js"></script>
+
+<body>
+    <!-- Login UI -->
+    <div class="container row col-md-12" style="height: 100%;">
+        <div class="col-md-8 p-0">
+            <img src="./officeWall.jpg" alt="" style="width: 100%;height: 100%;">
+        </div>
+        <div class="col-md-4 mt-5">
+            <h4>Log In</h4>
+            <form class="mt-3">
+                <div class="form-group">
+                    <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                    <input type="email" class="form-control" id="emailId" placeholder="" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="pwd"><i class="fa fa-key"></i> Password</label>
+                    <input type="password" class="form-control" id="pwdId" placeholder="" name="pswd">
+                </div>
+                <button type="button" class="btn btn-info btn-block" onclick="loginUser()">Login</button>
+                <div class="form-group mt-2" style="text-align: center;">
+                    <label class="form-check-label">
+                        Don't have an account ? <a type="button" class="text-info" data-toggle="modal"
+                            data-target="#regModelId">Register Here</a>
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Registration Model -->
+    <div class="modal fade" id="regModelId">
+        <div class="modal-dialog" style="max-width: 1000px!important;">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header bg-info">
+                    <h4 class="modal-title">Registration</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="patientNameId">Name</label>
+                                <input type="text" class="form-control" id="userNameId" placeholder="Enter Name"
+                                    value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Designation</label>
+                                <input type="text" class="form-control" id="designationId" placeholder="Enter Name"
+                                    value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="dobId">Date of Birth</label>
+                                <input type="date" class="form-control" id="dobId" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Date of Join</label>
+                                <input type="date" class="form-control" id="dojId" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="emailId">Email</label>
+                                <input type="email" class="form-control" id="userEmailId" value=""
+                                    placeholder="Enter Email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="passwordId">Create Password</label>
+                                <input type="password" class="form-control" id="passwordId" placeholder="Enter Password"
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="contactId">Contact no.</label>
+                                <input type="number" class="form-control" id="contactId" placeholder="Enter Contact no."
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="validationDefaultUsername">Gender</label>
+                                <div class="form-check">
+                                    <label class="form-check-label" for="maleId">
+                                        <input type="radio" class="form-check-input" id="maleId" name="genderRadio"
+                                            value="M">Male
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label" for="femaleId">
+                                        <input type="radio" class="form-check-input" id="femaleId" name="genderRadio"
+                                            value="F">Female
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <label class="form-check-label" for="otherId">
+                                        <input type="radio" class="form-check-input" id="otherId" name="genderRadio"
+                                            value="O">Other
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="admin">
+                                    <label class="form-check-label" for="selfNomine">Are you a Admin ?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="reset" class="border btn btn-light" data-dismiss="modal"
+                        onclick="resetData()">Close</button>
+                    <button type="button" class="border btn btn-info" onclick="registerUser()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
