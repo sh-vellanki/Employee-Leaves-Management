@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<title>Leave Management</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="./leaveApplySystem.js"></script>
+<style>
+    .card {
+        box-shadow: 1px 1px 14px 4px rgb(0 0 0 / 10%);
+        background-color: #fafafa;
+        border-radius: 10px;
+    }
+
+</style>
+
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="onload();" style="background-color: aliceblue;">
+    <nav class="navbar navbar-expand-lg navbar-dark"
+        style="background-image: linear-gradient(to right,#17a2b8, rgba(255,0,0,0)); background-color: #121210;">
+        <img src="./logo.png" alt="" style="height: 54px;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item menuCls active" menuType="APPLY_LEAVE" id="applyLeaveTabId">
+                    <a class="nav-link" href="#" ng-click="switchMenu('APPLY_LEAVE','applyLeaveTabId')">Apply Leave</a>
+                </li>
+                <li class="nav-item menuCls" id="myleaveTabId" menuType="MY_LEAVES">
+                    <a class="nav-link" href="#" ng-click="switchMenu('MY_LEAVES','myleaveTabId')">My Leave</a>
+                </li>
+                <li class="nav-item menuCls" menuType="ABOUT" id="aboutTabId">
+                    <a class="nav-link" href="#" ng-click="switchMenu('ABOUT','aboutTabId')">About</a>
+                </li>
+            </ul>
+            <span class="navbar-text" style="cursor: pointer;">
+                <i class="fa fa-sign-out" style="font-size: 20px;" ng-click="logout()">Logout</i>
+            </span>
+        </div>
+    </nav>
+    <!-- MY_LEAVES -->
+    <div class="col-md-12 p-0" id="myapplyLeaveDivId">
+
+        <div class="col-md-12 p-0">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Employee Name</th>
+                        <th scope="col">Leave Type</th>
+                        <th scope="col">From Date</th>
+                        <th scope="col">To Date</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Reason</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="data in viewUserData">
+                        <td scope="col">{{data.fullName}}</td>
+                        <td scope="col">{{data.leaveType}}</td>
+                        <td scope="col">{{data.fromDate}}</td>
+                        <td scope="col">{{data.toDate}}</td>
+                        <td scope="col">{{data.duration}}</td>
+                        <td scope="col">{{data.reason}}</td>
+                        <td scope="col" class="text-black" ng-show="admin != 'true'">{{data.status}}</td>
+                        <td scope="col" class="text-black" ng-show="admin == 'true'">
+                            <select ng-show="data.status == 'Pending'" class="form-control"
+                                ng-model="approvalStatus[$index]"
+                                ng-change="leaveApprovalStatus(data,approvalStatus[$index])">
+                                <option value="Approved">Approve</option>
+                                <option value="Rejected">Reject</option>
+                            </select>
+
+                            <span ng-show="data.status != 'Pending'">{{data.status}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--  APPLY_LEAVE  -->
+    <div class="col-md-12 d-flex justify-content-center" id="addPickDropDivId" ng-show="isIteamTab">
+        <form>
+            <div class="form-row col-md-12">
+                <div class="col-md-12 mb-3">
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" ng-model="userData.fullName" value="">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>Leave Type</label>
+                    <select class="form-control" ng-model="userData['leaveType']">
+                        <option value="Casual Leave">Casual Leave</option>
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Bereavement Leave">Bereavement Leave</option>
+                        <option value="Sabbatical Leave">Sabbatical Leave</option>
+                        <option value="Marriage Leave">Marriage Leave</option>
+                    </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>From Date</label>
+                    <input type="date" class="form-control" ng-model="userData.fromDate" value="">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>To Date</label>
+                    <input type="date" class="form-control" ng-model="userData.toDate" value="">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>Duration</label>
+                    <select class="form-control" ng-model="userData['duration']">
+                        <option value="Full Day">Full Day</option>
+                        <option value="Half Day">Half Day</option>
+                    </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label>Reason</label>
+                    <textarea class="form-control" ng-model="userData.reason"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12" style="z-index: 99999;">
+                <button type="button" class="border btn btn-info float-right mr-1 mb-2" ng-click="applyLeave()">Apply</button>
+                <button type="reset" class="border btn btn-light float-right mr-2">Clear</button>
+            </div>
+        </form>
+    </div>
+    <!-- About -->
+    <div class="col-md-12 p-0" id="aboutDivId">
+        <div class="col-md-12 p-0">
+            <img src="./company.jpg" alt="" style="width: 100%">
+        </div>
+
+        <div class="row m-2" style="justify-content: center;">
+            <div class="col-sm-8 mb-10 m-3">
+                <div class="card">
+                    <h4 class="value-item-heading"></h4>
+                    <div class="card-body">
+                        <p class="value-content">Our clients’ systems support modern society. In making them faster,
+                            more productive, and more secure, we don’t just make
+                            business work better. We make the world work better.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 mb-10 m-3">
+                <div class="card">
+                    <h4 class="value-item-heading"></h4>
+                    <div class="card-body">
+                        <p class="value-content">We bring together all the necessary technology and services, regardless
+                            of where those solutions come from, to help
+                            clients solve the most pressing business problems.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 mb-10 m-3">
+                <div class="card">
+                    <h4 class="value-item-heading"></h4>
+                    <div class="card-body">
+                        <p class="value-content">When you choose , you gain the strength, experience, expertise, and
+                            reliability of a recognized global IT security
+                            and privacy leader. This company Trust Center will provide you with information about our
+                            commitment to protect your data,
+                            and maintain the security and privacy for our enterprise, products and services. You will
+                            find information about us on
+                            internal IT security management program, privacy framework, and adherence to industry
+                            standards of our products and
+                            services.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>
